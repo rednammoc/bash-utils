@@ -1,7 +1,7 @@
 #!/bin/bash
 # name: config_utils.sh
 # description: Utils to read, load and validate config-file..
-# version: 0.7
+# version: 0.1
 # author: rednammoc
 #
 CONFIG_FILE="/etc/${APP_NAME}.conf"
