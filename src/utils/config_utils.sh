@@ -4,12 +4,25 @@
 # version: 0.1
 # author: rednammoc
 #
-CONFIG_FILE="/etc/${APP_NAME}.conf"
+if [ -z "${APP_NAME}" ]
+then
+	echo "ILLEGAL-STATE: No APP_NAME was specified."
+	exit 1
+fi
 
-# validate config-file
+if [[ -z "${CONFIG_FILE}" ]]; then CONFIG_FILE="/etc/${APP_NAME}.conf"; fi
+
+# setup config should initially construct the default configuration-file.
+config_setup() {
+	local CONFIG_FILE="$1"
+	trace "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
+	return 1
+}
+
+# validate config-file.
 config_validate() {
 	local CONFIG_FILE="$1"
-	log "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
+	trace "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
 	return 1
 }
 
@@ -28,7 +41,7 @@ config_load() {
 		return 1
 	fi
 
-	if [ $(config_validate "${CONFIG_FILE}") -eq 0 ]
+	if config_validate "${CONFIG_FILE}" -eq 0 
 	then
 		source "${CONFIG_FILE}"
 		return 0
