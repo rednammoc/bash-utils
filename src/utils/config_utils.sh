@@ -10,44 +10,74 @@ then
 	exit 1
 fi
 
+# use default configuration-file, when no configuration-file was set.
 if [[ -z "${CONFIG_FILE}" ]]; then CONFIG_FILE="/etc/${APP_NAME}.conf"; fi
 
 # setup config should initially construct the default configuration-file.
 config_setup() {
 	local CONFIG_FILE="$1"
-	trace "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
+	error "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
 	return 1
+}
+
+# check if field is set.
+config_validate_field_set() {
+	local CONFIG_FILE="$1"
+    local FIELD="$2"
+	local VALUE=$(config_read_field "${CONFIG_FILE}" "${FIELD}")
+    if [ -z "${VALUE}" ]
+    then
+        error "${FIELD} is not set."
+        return 1
+    fi
+    return 0
+}
+
+# check if a bunch of fields is set.
+config_validate_fields_set() {
+	local CONFIG_FILE="$1"
+	local SUCCESS=0
+	shift
+    for FIELD in "$@"
+    do
+        config_validate_field_set "${CONFIG_FILE}" "${FIELD}" 
+		if [ $? -ne 0 ] ; then SUCCESS=1; fi
+    done
+	return "${SUCCESS}"
 }
 
 # validate config-file.
 config_validate() {
 	local CONFIG_FILE="$1"
-	trace "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
+	error "$LOG_MSG_NOT_OVERWRITTEN_FUNCTION"
 	return 1
 }
 
-# loads config-file and calls config_validate.
+# load config-file.
 config_load() {
 	local CONFIG_FILE="$1"
 	if ! [ -e "${CONFIG_FILE}" ]
 	then
-		log "Couldn't load config-file at \"${CONFIG_FILE}\" ..."
+		error "Couldn't load config-file at \"${CONFIG_FILE}\" ..."
 		return 1
 	fi
 
 	if ! [ -r "${CONFIG_FILE}" ]
 	then
-		log "No permission to read config-file at \"${CONFIG_FILE}\" ..."
+		error "No permission to read config-file at \"${CONFIG_FILE}\" ..."
 		return 1
 	fi
 
-	if config_validate "${CONFIG_FILE}" -eq 0 
+	config_validate "${CONFIG_FILE}"
+	if [ $? != 0 ] 
 	then
-		source "${CONFIG_FILE}"
-		return 0
+		error "Validation of config-file \"${CONFIG_FILE}\" failed ..."
+		return 1
 	fi
-	
-	return 1
+
+	source "${CONFIG_FILE}"
+
+	return 0
 }
 
 # write entry in config-file.
