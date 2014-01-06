@@ -1,16 +1,13 @@
 #!/bin/bash
-# name: daemon_template.sh
-# description: This template can be used to develop a daemon-process.
-# version: 0.1
-# author: rednammoc
-#
-
 APP_NAME="daemon_template"
 APP_DESCRIPTION="description of what this daemon does."
+APP_DIR=${BASH_SOURCE%/*}
+APP_VERSION="0.1"
+APP_AUTHOR="rednammoc"
+APP_AUTHOR_EMAIL="rednammoc@gmx.de"
 
-BASH_TEMPLATES_DIR=${BASH_SOURCE%/*}
-if [[ ! -d "$BASH_TEMPLATES_DIR" ]]; then BASH_TEMPLATES_DIR="$PWD"; fi
-BASH_UTILS_DIR="${BASH_TEMPLATES_DIR}/../utils/"
+if [[ ! -d "$APP_DIR" ]]; then APP_DIR="$PWD"; fi
+BASH_UTILS_DIR="${APP_DIR}/../utils/"
 BASH_UTILS_DAEMON="${BASH_UTILS_DIR}/daemon_utils.sh"
 source "${BASH_UTILS_DAEMON}"
 
@@ -48,6 +45,8 @@ daemon_process() {
 	fi
 }
 
+# Call daemon_service with user-supplied arguments.
+# ( see daemon_utils.sh for more information )
 daemon_service $@
 
 #
