@@ -68,11 +68,25 @@ daemon_pid_reset() {
 	fi
 }
 
+daemon_start_notify() {
+	local $path="$1"
+	! [ -d "${path}" ] && error "Watching folder \"${path}\" failed! Folder not found!" && exit 1
+	inotifywait -mrq -e create --format %w%f "${path}" | while read FILE
+	do
+		# Do the daemon thing.
+		daemon_process
 
-# Calls daemon_process and sleeps afterwards.
-#  The process can be savely killed due to traps.
-daemon_start() {
-	daemon_pid_set "${BASHPID}"
+		# Savely exiting our daemon.
+		if [ -z $(daemon_pid_get) ]
+		then
+			daemon_cleanup
+			echo "Goodbye ..."
+			break
+		fi
+	done
+}
+
+daemon_start_default() {
 	while [ true ]
 	do
 		# Do the daemon-thing. 
@@ -94,6 +108,22 @@ daemon_start() {
 			break
 		fi
 	done
+}
+
+
+# Calls daemon_process and sleeps afterwards.
+#  The process can be savely killed due to traps.
+daemon_start() {
+	daemon_pid_set "${BASHPID}"
+	local mode="$1"
+	case "${mode}"
+		notify) 
+			daemon_start_notify ${@:2}
+			;;	
+		*) 	
+			daemon_start_default 
+			;;
+	esac
 }
 
 daemon_stop() {
