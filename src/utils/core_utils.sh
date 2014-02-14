@@ -74,3 +74,10 @@ require () {
 	return 0
 }
 
+_core_init () {
+	[[ -z "${BASH_UTILS_DIR}" ]] && echo "ERROR: BASH_UTILS_DIR not set!" && exit 1
+	require_path_add "${BASH_UTILS_DIR}"
+}
+
+# Init core.
+_core_init
