@@ -20,32 +20,6 @@ config_setup() {
 	return 1
 }
 
-# check if field is set.
-config_validate_field_set() {
-	local CONFIG_FILE="$1"
-    local FIELD="$2"
-	local VALUE=$(config_read_field "${CONFIG_FILE}" "${FIELD}")
-    if [ -z "${VALUE}" ]
-    then
-        error "${FIELD} is not set."
-        return 1
-    fi
-    return 0
-}
-
-# check if a bunch of fields is set.
-config_validate_fields_set() {
-	local CONFIG_FILE="$1"
-	local SUCCESS=0
-	shift
-    for FIELD in "$@"
-    do
-        config_validate_field_set "${CONFIG_FILE}" "${FIELD}" 
-		if [ $? -ne 0 ] ; then SUCCESS=1; fi
-    done
-	return "${SUCCESS}"
-}
-
 # validate config-file.
 config_validate() {
 	local CONFIG_FILE="$1"
@@ -80,8 +54,8 @@ config_load() {
 	return 0
 }
 
-# write entry in config-file.
-config_write_field() {
+# set entry in config-file.
+config_field_set() {
 	local CONFIG_FILE="$1"
 	local FIELD_NAME="$2"
 	local FIELD_VALUE="$3"
@@ -89,7 +63,7 @@ config_write_field() {
 }
 
 # get entry from config-file
-config_read_field() {
+config_field_get() {
 	local CONFIG_FILE="$1"
 	local FIELD_NAME="$2"
 	grep --only-matching --perl-regex "(?<=${FIELD_NAME}\=).*" "${CONFIG_FILE}"

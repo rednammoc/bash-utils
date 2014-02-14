@@ -69,12 +69,12 @@ daemon_pid_reset() {
 }
 
 daemon_start_notify() {
-	local $path="$1"
+	local path="$1"
 	! [ -d "${path}" ] && error "Watching folder \"${path}\" failed! Folder not found!" && exit 1
 	inotifywait -mrq -e create --format %w%f "${path}" | while read FILE
 	do
 		# Do the daemon thing.
-		daemon_process
+		daemon_process "${FILE}"
 
 		# Savely exiting our daemon.
 		if [ -z $(daemon_pid_get) ]
@@ -116,11 +116,13 @@ daemon_start_default() {
 daemon_start() {
 	daemon_pid_set "${BASHPID}"
 	local mode="$1"
-	case "${mode}"
+	case "${mode}" in
 		notify) 
+			debug "Starting daemon in mode=\"notify\"."
 			daemon_start_notify ${@:2}
 			;;	
 		*) 	
+			debug "Starting daemon in mode=\"default\"."
 			daemon_start_default 
 			;;
 	esac
@@ -134,7 +136,7 @@ daemon_service() {
 	case "$1" in
 	  start)
 			info "Starting $APP_NAME"
-			daemon_start &
+			daemon_start ${@:2} &
 			log "$APP_NAME is now running."
 			;;
 	  stop)

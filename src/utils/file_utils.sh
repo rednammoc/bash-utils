@@ -4,7 +4,7 @@
 # version: 0.2
 # author: rednammoc
 
-source "log_utils.sh"
+require "log_utils.sh"
 
 # checks whether a required file exists and is writeable.
 exit_when_file_not_writeable() {
