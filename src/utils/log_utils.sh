@@ -5,13 +5,11 @@
 # author: rednammoc
 #
 
-if [ -z "${APP_NAME}" ]
-then
-	echo "Illegal State: No APP_NAME was specified."
-	exit 1
-fi
-
+[ -z "${APP_NAME}" ] && echo "Illegal State: No APP_NAME was specified." && exit 1
 LOG_FILE="/var/log/${APP_NAME}.log"
+touch "${LOG_FILE}" &> /dev/null
+! [ -e "${LOG_FILE}" ] && echo "Warning: Log-File \"${LOG_FILE}\" does not exist!" && exit 1
+! [ -w "${LOG_FILE}" ] && echo "Warning: Log-File \"${LOG_FILE}\" is not writeable!" && exit 1
 
 # Log-levels
 #
