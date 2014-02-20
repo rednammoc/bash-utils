@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/!svn/ver/195/trunk/website/testresults/2.1.4
+END
+Cygwin-Windows_XP.txt
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/194/trunk/website/testresults/2.1.4/Cygwin-Windows_XP.txt
+END
+Linux-Ubuntu_Dapper-6.06.txt
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/191/trunk/website/testresults/2.1.4/Linux-Ubuntu_Dapper-6.06.txt
+END
+Mac_OS_X-10.5.4.txt
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/190/trunk/website/testresults/2.1.4/Mac_OS_X-10.5.4.txt
+END
+Solaris-nv-77-x86.txt
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/193/trunk/website/testresults/2.1.4/Solaris-nv-77-x86.txt
+END
+Solaris-9-U6-x86.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/195/trunk/website/testresults/2.1.4/Solaris-9-U6-x86.txt
+END
+Linux-Ubuntu_Hardy-8.04.txt
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/192/trunk/website/testresults/2.1.4/Linux-Ubuntu_Hardy-8.04.txt
+END

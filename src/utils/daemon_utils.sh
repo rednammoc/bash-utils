@@ -4,6 +4,7 @@
 # version: 0.1
 # author: rednammoc
 #
+[ -z "${APP_NAME}" ] && echo "Illegal State: No APP_NAME was specified." && return 1
 
 BASH_UTILS_DIR=${BASH_SOURCE%/*}
 if [[ ! -d "$BASH_UTILS_DIR" ]]; then BASH_UTILS_DIR="$PWD"; fi

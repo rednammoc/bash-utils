@@ -6,12 +6,11 @@ setup () {
 	touch "${CONFIG_FILE}"
 }
 
-
-
 source ../../src/utils/daemon_utils.sh
 
 # overwrite functions
 config_validate () { return 0; }
 
 setup
-daemon_start
+
+daemon_service $@

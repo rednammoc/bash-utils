@@ -3,7 +3,7 @@
 # description: Collection of utils to interact with files.
 # version: 0.2
 # author: rednammoc
-
+[ -z "${APP_NAME}" ] && echo "Illegal State: No APP_NAME was specified." && return 1
 require "log_utils.sh"
 
 # checks whether a required file exists and is writeable.

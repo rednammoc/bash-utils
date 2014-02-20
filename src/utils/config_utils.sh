@@ -4,11 +4,7 @@
 # version: 0.1
 # author: rednammoc
 #
-if [ -z "${APP_NAME}" ]
-then
-	echo "ILLEGAL-STATE: No APP_NAME was specified."
-	exit 1
-fi
+[ -z "${APP_NAME}" ] && echo "Illegal State: No APP_NAME was specified." && return 1
 
 # use default configuration-file, when no configuration-file was set.
 if [[ -z "${CONFIG_FILE}" ]]; then CONFIG_FILE="/etc/${APP_NAME}.conf"; fi
