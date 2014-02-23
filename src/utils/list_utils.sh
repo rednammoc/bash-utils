@@ -6,13 +6,20 @@ list_size () {
 }
 
 list_enumerate () {
-	local LIST="$1"
-	local INDEX=1
-	while read LINE
+	local list="$1"
+	local highlight="$2"
+	local index=1
+	while read line
 	do
-		printf "%+6s      %s\n" "${INDEX}" "${LINE}"
-		INDEX=$(expr ${INDEX} + 1)
-	done <"${LIST}"
+		local color=''
+		if [ $index -eq $highlight ] 
+		then
+			printf "\e[1;34m%+6s      %s\e[m\n" "${index}" "${line}"
+		else
+			printf "%+6s      %s\n" "${index}" "${line}"
+		fi
+		index=$(expr ${index} + 1)
+	done <"${list}"
 	return 0
 }
 
