@@ -42,9 +42,13 @@ list_get () {
 list_put () {
 	local list="$1"
 	local entry="$2"
-	# notice: index is ignored for now but may be added in the future.
 	local index="$3"
-	echo "${entry}" >> "${list}"
+	if [ -z "${index}" ]
+	then
+		echo "${entry}" >> "${list}"
+	else
+		sed -i "${index}i${entry}" "${list}"
+	fi
 }
 
 list_delete () {
