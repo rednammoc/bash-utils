@@ -42,7 +42,7 @@ require_path_add () {
 
 _require () {
 	local requirement=$(_strip_file "$1")
-	! [ -f "${requirement}" ] && echo "ERROR: _require failed! \"${requirement}\" not found! Abort." && exit 1
+	! [ -f "${requirement}" ] && echo "ERROR: _require failed! \"${requirement}\" not found! Abort." && return 1
 	_was_already_required "${requirement}" && return
 	_BASH_UTILS_REQUIRED_FILES+=(${requirement})
 	source "${requirement}"
@@ -52,7 +52,7 @@ _require () {
 _lock () {
 	local requirement=$(_strip_file "$1")
 	[ -z "${requirement}" ] && return 1
-	! [ -f "${requirement}" ] && echo "ERROR: _lock failed! \"${requirement}\" not found! Abort." && exit 1
+	! [ -f "${requirement}" ] && echo "ERROR: _lock failed! \"${requirement}\" not found! Abort." && return 1
 	_was_already_required "${requirement}" && return
 	_BASH_UTILS_REQUIRED_FILES+=(${requirement})
  }
@@ -66,7 +66,7 @@ require () {
 		if ! [ -f "${requirement}" ]
 		then
 			local path=$(_get_required_path "${requirement}")
-			[ -z "${path}" ] &&	echo "ERROR: require failed! \"${requirement}\" not found! Abort." && exit 1
+			[ -z "${path}" ] &&	echo "ERROR: require failed! \"${requirement}\" not found! Abort." && return 1
 			requirement="${path}/${requirement}"
 		fi
 		_require "${requirement}"
@@ -75,7 +75,7 @@ require () {
 }
 
 _core_init () {
-	[[ -z "${BASH_UTILS_DIR}" ]] && echo "ERROR: BASH_UTILS_DIR not set!" && exit 1
+	[[ -z "${BASH_UTILS_DIR}" ]] && echo "ERROR: BASH_UTILS_DIR not set!" && return 1
 	require_path_add "${BASH_UTILS_DIR}"
 }
 
