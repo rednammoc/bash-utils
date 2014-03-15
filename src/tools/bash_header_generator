@@ -21,7 +21,7 @@ cat > "${out}" <<EOF
 #!/bin/bash
 APP_NAME="$app_name"
 APP_DESCRIPTION="${app_description}"
-APP_DIR=${BASH_SOURCE%/*}
+APP_DIR=\${BASH_SOURCE%/*}
 APP_VERSION="${app_version}"
 APP_AUTHOR="${app_author}"
 APP_AUTHOR_EMAIL="${app_author_email}"
