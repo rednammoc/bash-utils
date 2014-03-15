@@ -12,8 +12,8 @@ source "${BASH_UTILS_DIR}/core_utils.sh"
 
 require ../../lib/assert.sh/assert.sh
 
-ASSERT_UTILS_SETUP=true
-ASSERT_UTILS_TEAR_DOWN=true
+ASSERT_UTILS_SETUP=0
+ASSERT_UTILS_TEAR_DOWN=0
 
 # You should overwrite \"setup\" to call your own routines.
 #  Set ASSERT_UTILS_SETUP=false in your script to disable calling this method.
@@ -38,9 +38,9 @@ function run_tests
 	test_functions=$(cat "${src}" | grep "function test" | cut -f2 -d' ')
 	for test in ${test_functions}
 	do
-		[ "${ASSERT_UTILS_SETUP}" ] 		&& setup 		"${test}"
+		[[ ${ASSERT_UTILS_SETUP} ]] 		&& setup 		"${test}"
 		eval "${test}"
-		[ "${ASSERT_UTILS_TEAR_DOWN}" ] 	&& tear_down	"${test}"
+		[[ ${ASSERT_UTILS_TEAR_DOWN} ]] 	&& tear_down	"${test}"
 	done
 	assert_end "${title}"
 }
