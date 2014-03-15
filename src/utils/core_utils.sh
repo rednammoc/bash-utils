@@ -34,7 +34,7 @@ _get_required_path () {
 
 require_path_add () {
 	local path="$1"
-	! [ -d "${path}" ] && echo "ERROR: \"${path}\" not found!" && return 1
+	! [ -d "${path}" ] && echo >&2 "ERROR: \"${path}\" not found!" && return 1
 	_was_already_added "${path}" && return 1
 	_BASH_UTILS_REQUIRED_PATHS+=(${path}) 
 	return 0
@@ -42,22 +42,24 @@ require_path_add () {
 
 _require () {
 	local requirement=$(_strip_file "$1")
-	! [ -f "${requirement}" ] && echo "ERROR: _require failed! \"${requirement}\" not found! Abort." && return 1
+	! [ -f "${requirement}" ] && echo >&2 "ERROR: _require failed! \"${requirement}\" not found! Abort." && return 1
 	_was_already_required "${requirement}" && return
 	_BASH_UTILS_REQUIRED_FILES+=(${requirement})
 	source "${requirement}"
 	return 0
 }
 
+# _lock will add the script which is calling the require-command to the required files.
+#  This will prevent the require-command to include the caller-script again.  
 _lock () {
 	local requirement=$(_strip_file "$1")
 	[ -z "${requirement}" ] && return 1
-	! [ -f "${requirement}" ] && echo "ERROR: _lock failed! \"${requirement}\" not found! Abort." && return 1
+	! [ -f "${requirement}" ] && echo >&2 "ERROR: _lock failed! \"${requirement}\" not found! Abort." && return 1
 	_was_already_required "${requirement}" && return
 	_BASH_UTILS_REQUIRED_FILES+=(${requirement})
  }
 
-# Usage: require "log_utils.sh"
+# require will include scripts within the caller. It will prevent from include cyclic dependencies.
 require () {
 	_lock $(caller 3 | cut -f3 -d' ')
 	local requirements="$@"
@@ -66,7 +68,7 @@ require () {
 		if ! [ -f "${requirement}" ]
 		then
 			local path=$(_get_required_path "${requirement}")
-			[ -z "${path}" ] &&	echo "ERROR: require failed! \"${requirement}\" not found! Abort." && return 1
+			[ -z "${path}" ] &&	echo >&2 "ERROR: require failed! \"${requirement}\" not found! Abort." && return 1
 			requirement="${path}/${requirement}"
 		fi
 		_require "${requirement}"
@@ -74,8 +76,23 @@ require () {
 	return 0
 }
 
+# depends will print an error message and return false when an dependent command does not exist.
+depends () {
+	local commands="$@"
+	local commands_found=true
+	for command in "${commands}"
+	do
+		if ! command -v "${command}" >/dev/null 2>&1
+		then
+			echo >&2 "Dependent command \"${command}\" was not found. Abort."
+			commands_found=false
+		fi
+	done
+	return "${commands_found}"
+}
+
 _core_init () {
-	[[ -z "${BASH_UTILS_DIR}" ]] && echo "ERROR: BASH_UTILS_DIR not set!" && return 1
+	[[ -z "${BASH_UTILS_DIR}" ]] && echo >&2 "ERROR: BASH_UTILS_DIR not set!" && return 1
 	require_path_add "${BASH_UTILS_DIR}"
 }
 
