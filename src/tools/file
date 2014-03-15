@@ -1,0 +1,13 @@
+#!/bin/bash
+APP_NAME="asd"
+APP_DESCRIPTION="asd"
+APP_DIR=.
+APP_VERSION="asd"
+APP_AUTHOR="asd"
+APP_AUTHOR_EMAIL="dsa"
+
+# Load bash-utils core.
+if [[ ! -d "${APP_DIR}" ]]; then APP_DIR="$PWD"; fi
+BASH_UTILS_DIR="${APP_DIR}/lib/bash-utils/src/utils"
+source "${BASH_UTILS_DIR}/core_utils.sh"
+

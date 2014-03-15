@@ -1,0 +1,34 @@
+#!/bin/bash
+
+echo -n "APP_NAME="
+read app_name
+
+echo -n "APP_DESCRIPTION="
+read app_description
+
+echo -n "APP_VERSION="
+read app_version
+
+echo -n "APP_AUTHOR="
+read app_author
+
+echo -n "APP_AUTHOR_EMAIL="
+read app_author_email
+
+out="${app_name}.sh"
+
+cat > "${out}" <<EOF
+#!/bin/bash
+APP_NAME="$app_name"
+APP_DESCRIPTION="${app_description}"
+APP_DIR=${BASH_SOURCE%/*}
+APP_VERSION="${app_version}"
+APP_AUTHOR="${app_author}"
+APP_AUTHOR_EMAIL="${app_author_email}"
+
+# Load bash-utils core.
+if [[ ! -d "\${APP_DIR}" ]]; then APP_DIR="\$PWD"; fi
+BASH_UTILS_DIR="\${APP_DIR}/lib/bash-utils/src/utils"
+source "\${BASH_UTILS_DIR}/core_utils.sh"
+
+EOF
