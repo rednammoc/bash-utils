@@ -79,13 +79,13 @@ require () {
 # depends will print an error message and return false when an dependent command does not exist.
 depends () {
 	local commands="$@"
-	local commands_found=true
+	local commands_found=0
 	for command in "${commands}"
 	do
 		if ! command -v "${command}" >/dev/null 2>&1
 		then
 			echo >&2 "Dependent command \"${command}\" was not found. Abort."
-			commands_found=false
+			commands_found=1
 		fi
 	done
 	return "${commands_found}"
